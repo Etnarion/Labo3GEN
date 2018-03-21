@@ -12,13 +12,22 @@ public class VuePendule extends JFrame implements Observer {
     private static int TAILLE = 100; // Taille de la demi-fenétre
     private ToileGraphique toile;
     private Pendule pendule;
+    JLabel alphNum;
 
     public VuePendule (String nom, int posX, int posY, Pendule pendule) {
         this.pendule = pendule;
         toile = new ToileGraphique();
         setTitle(nom);
+        JButton b = new JButton("+");
+        add(b);
+        b.addActionListener((ActionEvent e) -> {
+            pendule.incrementerMinutes();
+        });
+        getContentPane().add (b, BorderLayout.NORTH);
         getContentPane().add (toile, BorderLayout.CENTER);
-
+        alphNum = new JLabel();
+        alphNum.setText("0:0:0");
+        getContentPane().add (alphNum, BorderLayout.SOUTH);
         pack();
         setResizable(false);
         setLocation (posX, posY);
@@ -29,6 +38,7 @@ public class VuePendule extends JFrame implements Observer {
     @Override
     public void update(Observable observable, Object o) {
         toile.repaint();
+        alphNum.setText(pendule.getHeures() + ":" + pendule.getMinutes() + ":" + pendule.getSecondes());
     }
 
     //------------------------------------------------------------------------
@@ -36,11 +46,6 @@ public class VuePendule extends JFrame implements Observer {
 
         public ToileGraphique() {
             setBackground(Color.white);
-            JButton b = new JButton("+");
-            add(b);
-            b.addActionListener((ActionEvent e) -> {
-                pendule.incrementerMinutes();
-            });
         }
 
         public void paintComponent (Graphics g) {
