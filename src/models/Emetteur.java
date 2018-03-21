@@ -52,6 +52,7 @@ public class Emetteur extends Observable implements Runnable {
     private void heureMettreAJour () {
         secondes = ++secondes % 60;
         notifyObservers();
+        if (secondes == 0) notifyAll();
     }
 
     @Override

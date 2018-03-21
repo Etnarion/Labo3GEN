@@ -14,17 +14,19 @@ import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
 
-public class Pendule extends Observable implements Runnable {
+public class Pendule extends Observable implements Runnable, Observer {
     private LinkedList<Observer> observers;
     private int dureeSeconde;       // Durée de la seconde en msec.
     private int minutes = 0;       	// Compteurs de la pendule
     private int secondes = 0;
     private int heures = 0;
+    private Emetteur emetteur;
 
     private Thread thread;
 
     //------------------------------------------------------------------------
-    public Pendule (int valSeconde) {
+    public Pendule (int valSeconde, Emetteur emetteur) {
+        this.emetteur = emetteur;
         dureeSeconde = valSeconde;
         observers = new LinkedList<>();
         thread = new Thread(this);
@@ -34,6 +36,11 @@ public class Pendule extends Observable implements Runnable {
     public void incrementerSecondes(){
         secondes ++;
         if (secondes == 60) {
+            try {
+                emetteur.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             secondes = 0;
             incrementerMinutes();
         }
@@ -70,6 +77,10 @@ public class Pendule extends Observable implements Runnable {
             incrementerSecondes();
 
         }
+    }
+
+    @Override
+    public void update(Observable observable, Object o) {
     }
 
     public int getSecondes() {
