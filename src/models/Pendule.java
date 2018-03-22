@@ -33,13 +33,15 @@ public class Pendule extends Observable implements Runnable, Observer {
         thread.start();
     }
 
-    public void incrementerSecondes(){
+    public synchronized void incrementerSecondes(){
         secondes ++;
         if (secondes == 60) {
-            try {
-                emetteur.wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            synchronized (emetteur) {
+                try {
+                    emetteur.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
             secondes = 0;
             incrementerMinutes();

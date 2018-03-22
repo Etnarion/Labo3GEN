@@ -13,7 +13,7 @@ public class Amorce {
         Emetteur e = new Emetteur(100);
         e.addObserver(new VueEmetteur());
 
-        Pendule p1 = new Pendule(45, e);
+        Pendule p1 = new Pendule(130, e);
         Pendule p2 = new Pendule(30, e);
         Pendule p3 = new Pendule(40, e);
         p1.addObserver(new VuePendule("H1", 100, 0, p1));
